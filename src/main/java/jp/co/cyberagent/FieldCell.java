@@ -61,7 +61,6 @@ public class FieldCell {
 
     public char convertToChar() {
         if (objectType == ObjectType.EMPTY) {
-            // objectType is EMPTY
             switch (floorType) {
                 case EMPTY:
                     return ' ';
@@ -73,13 +72,7 @@ public class FieldCell {
         } else if (objectType == ObjectType.PLAYER) {
             return 'p';
         } else {
-            // objectType is FREIGHT
-            switch (floorType) {
-                case EMPTY:
-                    return 'o';
-                case GOAL:
-                    return 'o';
-            }
+            return 'o';
         }
 
         return '?';

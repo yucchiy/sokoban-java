@@ -1,5 +1,6 @@
 package jp.co.cyberagent;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -8,18 +9,23 @@ import static org.junit.Assert.*;
 
 public class FieldTest {
 
+    private Field field;
+
+    private String[] fieldString = {
+            "######",
+            "#.   #",
+            "#    #",
+            "#  op#",
+            "######"
+    };
+
+    @Before
+    public void setup() throws Exception {
+        field = new Field(new FieldOption(Arrays.asList(fieldString)));
+    }
+
     @Test
     public void testGetCellViaPosition() throws Exception {
-        String[] fieldString = {
-                "######",
-                "#.   #",
-                "#    #",
-                "#  op#",
-                "######"
-        };
-
-        Field field = new Field(new FieldOption(Arrays.asList(fieldString)));
-
         assertEquals(field.getCellViaPosition(new Position(0, 0)), new FieldCell('#'));
         assertEquals(field.getCellViaPosition(new Position(1, 1)), new FieldCell('.'));
         assertEquals(field.getCellViaPosition(new Position(1, 2)), new FieldCell(' '));
@@ -32,19 +38,14 @@ public class FieldTest {
 
     @Test
     public void testGetFieldLine() throws Exception {
-        String[] fieldString = {
-                "######",
-                "#.   #",
-                "#    #",
-                "#  op#",
-                "######"
-        };
-
-        Field field = new Field(new FieldOption(Arrays.asList(fieldString)));
-
         assertEquals(field.getFieldLine(0).equals("######"), true);
         assertEquals(field.getFieldLine(1).equals("#.   #"), true);
         assertEquals(field.getFieldLine(3).equals("#  op#"), true);
+    }
 
+    @Test
+    public void testGetWidthAndGetHeight() throws Exception {
+        assertEquals(field.getHeight(), 5);
+        assertEquals(field.getWidth(),  6);
     }
 }
