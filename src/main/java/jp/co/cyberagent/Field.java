@@ -7,7 +7,7 @@ public class Field {
 
     private final int width, height;
     public Position player;
-    private Map<Position, FieldCell> data = new HashMap<Position, FieldCell>();
+    private Map<Position, FieldCell> data = new HashMap<>();
 
     Field(FieldOption fieldOption) {
         width = fieldOption.getWidth();
