@@ -18,15 +18,17 @@ public class App {
         };
 
         FieldOption option = new FieldOption(Arrays.asList(fieldString));
-        Field field = new Field(option);
-
-        try (Game game = new Game(new GuiTerminalImpl(), new GameState(field))) {
-            game.play();
-        } catch (Exception e) {
-            // Todo: Error processing
-            System.out.println(e.getMessage());
-        } finally {
-            // Todo: Do something
+        while (true) {
+            Field field = new Field(option);
+            try (Game game = new Game(new GuiTerminalImpl(), new GameState(field))) {
+                game.play();
+                if (!game.retry) break;
+            } catch (Exception e) {
+                // Todo: Error processing
+                System.out.println(e.getMessage());
+            } finally {
+                // Todo: Do something
+            }
         }
 	}
 }

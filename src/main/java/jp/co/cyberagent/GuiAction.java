@@ -6,6 +6,8 @@ public enum GuiAction {
     MOVE_DOWN,
     MOVE_LEFT,
     QUIT,
+    UNDO,
+    RESET,
     UNKNOWN;
 
     public static GuiAction convertFromChar(char c) {
@@ -18,6 +20,10 @@ public enum GuiAction {
                 return MOVE_DOWN;
             case 'h':
                 return MOVE_LEFT;
+            case 'u':
+                return UNDO;
+            case 'r':
+                return RESET;
             case 'q':
                 return QUIT;
         }

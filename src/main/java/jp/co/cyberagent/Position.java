@@ -21,4 +21,9 @@ public class Position {
         hash = ((hash + y) << 5) - (hash + y);
         return hash;
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
 }

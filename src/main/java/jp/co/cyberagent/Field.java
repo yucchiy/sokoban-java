@@ -1,7 +1,7 @@
 package jp.co.cyberagent;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 
 public class Field {
 

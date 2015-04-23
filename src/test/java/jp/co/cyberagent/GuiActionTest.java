@@ -13,6 +13,8 @@ public class GuiActionTest {
         assertEquals(GuiAction.MOVE_DOWN,  GuiAction.convertFromChar('j'));
         assertEquals(GuiAction.MOVE_LEFT,  GuiAction.convertFromChar('h'));
 
-        assertEquals(GuiAction.QUIT, GuiAction.convertFromChar('q'));
+        assertEquals(GuiAction.RESET, GuiAction.convertFromChar('r'));
+        assertEquals(GuiAction.UNDO,  GuiAction.convertFromChar('u'));
+        assertEquals(GuiAction.QUIT,  GuiAction.convertFromChar('q'));
     }
 }

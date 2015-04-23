@@ -5,6 +5,8 @@ public class Game implements AutoCloseable {
     private Gui gui;
     private GameState state;
 
+    public boolean retry = false;
+
     public Game(Gui gui, GameState state) {
         this.gui = gui;
         this.state = state;
@@ -19,8 +21,18 @@ public class Game implements AutoCloseable {
     public void play() {
         boolean playing = true;
         do {
+            System.out.println(state.field.player);
             GuiAction action = gui.getAction();
+            switch (action) {
+                case RESET:
+                    retry = true;
+                case QUIT:
+                    playing = false;
+                    break;
+            }
+
             if (action == GuiAction.QUIT) playing = false;
+
             doStep(action);
         } while (playing);
     }
