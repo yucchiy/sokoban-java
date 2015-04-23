@@ -35,8 +35,7 @@ public class Game implements AutoCloseable {
                     if (!actionStack.empty()) undoAction(actionStack.pop());
                     break;
                 default:
-                    doAction(action);
-                    actionStack.push(action);
+                    if (actionStack.size() < state.limit) doAction(action);
                     break;
             }
 
@@ -64,7 +63,10 @@ public class Game implements AutoCloseable {
                 break;
         }
 
-        if (move(state.field.player, dx, dy)) refreshScreen();
+        if (move(state.field.player, dx, dy)) {
+            actionStack.push(action);
+            refreshScreen();
+        }
     }
 
     public void undoAction(GuiAction action) {
@@ -110,6 +112,7 @@ public class Game implements AutoCloseable {
     public void refreshScreen() {
         gui.refresh();
         for (int y = 0; y < state.field.getHeight(); y++) gui.putString(0, y, state.field.getFieldLine(y));
+        gui.putString(0, state.field.getHeight() + 1, actionStack.size() + " / " + state.limit);
     }
 
     @Override

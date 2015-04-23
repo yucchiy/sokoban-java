@@ -20,7 +20,7 @@ public class App {
         FieldOption option = new FieldOption(Arrays.asList(fieldString));
         while (true) {
             Field field = new Field(option);
-            try (Game game = new Game(new GuiTerminalImpl(), new GameState(field))) {
+            try (Game game = new Game(new GuiTerminalImpl(), new GameState(field, 20))) {
                 game.play();
                 if (!game.retry) break;
             } catch (Exception e) {
