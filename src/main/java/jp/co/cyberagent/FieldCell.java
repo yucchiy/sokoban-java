@@ -1,5 +1,7 @@
 package jp.co.cyberagent;
 
+import com.google.gson.annotations.SerializedName;
+
 public class FieldCell {
 
     enum FloorType {
@@ -14,7 +16,10 @@ public class FieldCell {
         FREIGHT
     }
 
+    @SerializedName("floor_type")
     private final FloorType floorType;
+
+    @SerializedName("object_type")
     private final ObjectType objectType;
 
     FieldCell(char c) {
@@ -85,8 +90,7 @@ public class FieldCell {
 
     @Override
     public boolean equals(Object obj) {
-        FieldCell c = (FieldCell)obj;
+        FieldCell c = (FieldCell) obj;
         return floorType == c.floorType && objectType == c.objectType;
     }
-
 }

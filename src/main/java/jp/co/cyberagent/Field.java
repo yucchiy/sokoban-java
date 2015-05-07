@@ -1,13 +1,25 @@
 package jp.co.cyberagent;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
 public class Field {
 
-    private final int width, height;
+    @SerializedName("width")
+    private final int width;
+
+    @SerializedName("height")
+    private final int height;
+
+    @SerializedName("player_position")
     public Position player;
-    private Map<Position, FieldCell> data = new HashMap<>();
+
+    @SerializedName("data")
+    private List<FieldCell> data = new ArrayList<>();
 
     Field(FieldOption fieldOption) {
         width = fieldOption.getWidth();
@@ -22,7 +34,7 @@ public class Field {
                     py = y;
                 }
 
-                data.put(new Position(x, y), new FieldCell(c));
+                data.add(new FieldCell(c));
             }
         }
 
@@ -37,13 +49,17 @@ public class Field {
         return height;
     }
 
-    public void updateFieldObject(Position p, FieldCell.ObjectType objectType) {
-        FieldCell cc = getCellViaPosition(p);
-        data.replace(p, new FieldCell(cc.getFloorType(), objectType));
+    public int getIndex(Position p) {
+        return p.y * getWidth() + p.x;
     }
 
-    public FieldCell getCellViaPosition(Position pos) {
-        return data.get(pos);
+    public void updateFieldObject(Position p, FieldCell.ObjectType objectType) {
+        FieldCell cc = getCellViaPosition(p);
+        data.set(getIndex(p), new FieldCell(cc.getFloorType(), objectType));
+    }
+
+    public FieldCell getCellViaPosition(Position p) {
+        return data.get(getIndex(p));
     }
 
     public String getFieldLine(int y) {

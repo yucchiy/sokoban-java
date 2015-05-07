@@ -1,8 +1,15 @@
 package jp.co.cyberagent;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Position {
 
-    public final int x, y;
+    @SerializedName("x")
+    public final int x;
+
+    @SerializedName("y")
+    public final int y;
+
     Position(int x, int y) {
         this.x = x;
         this.y = y;
@@ -22,8 +29,10 @@ public class Position {
         return hash;
     }
 
+    /*
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
+    */
 }

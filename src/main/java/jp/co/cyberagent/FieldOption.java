@@ -22,5 +22,4 @@ public class FieldOption {
         if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight()) throw new IndexOutOfBoundsException("");
         return fieldStrings.get(y).charAt(x);
     }
-
 }

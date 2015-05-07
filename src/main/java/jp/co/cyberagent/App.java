@@ -1,11 +1,15 @@
 package jp.co.cyberagent;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.StringArrayOptionHandler;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -23,8 +27,8 @@ public class App {
     @Argument(index = 0, metaVar = "arguments...", handler = StringArrayOptionHandler.class)
     private String[] arguments;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
 
+    public static void main(String[] args) throws IOException, InterruptedException {
         String[] fieldString = {
                 "######",
                 "#.   #",
@@ -34,12 +38,12 @@ public class App {
         };
 
         App app = new App();
-
         CmdLineParser parser = new CmdLineParser(app);
         try {
             parser.parseArgument(args);
         } catch (CmdLineException e) {
             parser.printUsage(System.err);
+            return;
         }
 
         if (app.showUsage) {
@@ -48,9 +52,20 @@ public class App {
         }
 
         FieldOption option = new FieldOption(Arrays.asList(fieldString));
+
+        GameState state = null;
+        try (JsonReader reader = new JsonReader(new BufferedReader(new FileReader("./state.json")))) {
+            Gson gson = new Gson();
+            state = gson.fromJson(reader, GameState.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            state = new GameState(new Field(option), app.limit);
+        }
+
+        if (state == null || state.field == null || state.actionStack == null) state = new GameState(new Field(option), app.limit);
+
         while (true) {
-            Field field = new Field(option);
-            try (Game game = new Game(new GuiTerminalImpl(), new GameState(field, app.limit))) {
+            try (Game game = new Game(new GuiTerminalImpl(), state)) {
                 game.play();
                 if (!game.retry) break;
             } catch (Exception e) {

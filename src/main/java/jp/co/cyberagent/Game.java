@@ -1,13 +1,17 @@
 package jp.co.cyberagent;
 
-import java.util.Stack;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonWriter;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Game implements AutoCloseable {
 
     private Gui gui;
     private GameState state;
-    private Stack<GuiAction> actionStack = new Stack<>();
-
+    private Gson gson = new Gson();
     public boolean retry = false;
 
     public Game(Gui gui, GameState state) {
@@ -21,7 +25,7 @@ public class Game implements AutoCloseable {
         refreshScreen();
     }
 
-    public void play() {
+    public void play() throws IOException {
         boolean playing = true;
         do {
             GuiAction action = gui.getAction();
@@ -31,16 +35,23 @@ public class Game implements AutoCloseable {
                 case QUIT:
                     playing = false;
                     break;
+                case SAVE:
+                    try (JsonWriter writer = new JsonWriter(new BufferedWriter(new FileWriter("./state.json")))) {
+                        gson.toJson(state, GameState.class, writer);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    playing = false;
+                    break;
                 case UNDO:
-                    if (!actionStack.empty()) undoAction(actionStack.pop());
+                    if (!state.actionStack.isEmpty()) undoAction(state.actionStack.remove(state.actionStack.size() - 1));
                     break;
                 default:
-                    if (state.limit < 0 || actionStack.size() < state.limit) doAction(action);
+                    if (state.limit < 0 || state.actionStack.size() < state.limit) doAction(action);
                     break;
             }
 
             if (action == GuiAction.QUIT) playing = false;
-
         } while (playing);
     }
 
@@ -64,7 +75,7 @@ public class Game implements AutoCloseable {
         }
 
         if (move(state.field.player, dx, dy)) {
-            actionStack.push(action);
+            state.actionStack.add(action);
             refreshScreen();
         }
     }
@@ -112,7 +123,7 @@ public class Game implements AutoCloseable {
     public void refreshScreen() {
         gui.refresh();
         for (int y = 0; y < state.field.getHeight(); y++) gui.putString(0, y, state.field.getFieldLine(y));
-        if (state.limit > 0) gui.putString(0, state.field.getHeight() + 1, actionStack.size() + " / " + state.limit);
+        if (state.limit > 0) gui.putString(0, state.field.getHeight() + 1, state.actionStack.size() + " / " + state.limit);
     }
 
     @Override

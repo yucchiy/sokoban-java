@@ -8,6 +8,7 @@ public enum GuiAction {
     QUIT,
     UNDO,
     RESET,
+    SAVE,
     UNKNOWN;
 
     public static GuiAction convertFromChar(char c) {
@@ -24,6 +25,8 @@ public enum GuiAction {
                 return UNDO;
             case 'r':
                 return RESET;
+            case 's':
+                return SAVE;
             case 'q':
                 return QUIT;
         }
