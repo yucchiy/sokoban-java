@@ -22,7 +22,7 @@ public class App {
     private boolean showUsage;
 
     @Option(name = "-l", aliases = "--limit", usage = "set limit")
-    private int limit = 30;
+    private int limit = 50;
 
     @Argument(index = 0, metaVar = "arguments...", handler = StringArrayOptionHandler.class)
     private String[] arguments;
@@ -30,11 +30,14 @@ public class App {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         String[] fieldString = {
-                "######",
-                "#.   #",
-                "#o   #",
-                "#   p#",
-                "######"
+                "########",
+                "##  ####",
+                "##     #",
+                "##o.. .#",
+                "#  ##p##",
+                "# oo  ##",
+                "#     ##",
+                "########"
         };
 
         App app = new App();
@@ -64,13 +67,10 @@ public class App {
 
         if (state == null || state.field == null || state.actionStack == null) state = new GameState(new Field(option), app.limit);
 
-        while (true) {
-            try (Game game = new Game(new GuiTerminalImpl(), state)) {
-                game.play();
-                if (!game.retry) break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+        try (Game game = new Game(new GuiTerminalImpl(), state)) {
+            game.play();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 	}
 }

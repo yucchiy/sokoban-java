@@ -12,7 +12,6 @@ public class Game implements AutoCloseable {
     private Gui gui;
     private GameState state;
     private Gson gson = new Gson();
-    public boolean retry = false;
 
     public Game(Gui gui, GameState state) {
         this.gui = gui;
@@ -30,19 +29,17 @@ public class Game implements AutoCloseable {
         do {
             GuiAction action = gui.getAction();
             switch (action) {
-                case RESET:
-                    retry = true;
-                case QUIT:
-                    playing = false;
-                    break;
                 case SAVE:
                     try (JsonWriter writer = new JsonWriter(new BufferedWriter(new FileWriter("./state.json")))) {
                         gson.toJson(state, GameState.class, writer);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                case QUIT:
                     playing = false;
                     break;
+                case RESET:
+                    while (!state.actionStack.isEmpty()) undoAction(state.actionStack.remove(state.actionStack.size() - 1));
                 case UNDO:
                     if (!state.actionStack.isEmpty()) undoAction(state.actionStack.remove(state.actionStack.size() - 1));
                     break;

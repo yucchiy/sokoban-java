@@ -12,11 +12,14 @@ public class FieldTest {
     private Field field;
 
     private String[] fieldString = {
-            "######",
-            "#.   #",
-            "#    #",
-            "#  op#",
-            "######"
+            "########",
+            "##  ####",
+            "##     #",
+            "##o.. .#",
+            "#  ##p##",
+            "# oo  ##",
+            "#     ##",
+            "########"
     };
 
     @Before
