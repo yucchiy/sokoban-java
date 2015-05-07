@@ -24,6 +24,9 @@ public class App {
     @Option(name = "-l", aliases = "--limit", usage = "set limit")
     private int limit = 50;
 
+    @Option(name = "-n", aliases = "--new", usage = "start new game")
+    private boolean startWithNewGame;
+
     @Argument(index = 0, metaVar = "arguments...", handler = StringArrayOptionHandler.class)
     private String[] arguments;
 
@@ -57,12 +60,14 @@ public class App {
         FieldOption option = new FieldOption(Arrays.asList(fieldString));
 
         GameState state = null;
-        try (JsonReader reader = new JsonReader(new BufferedReader(new FileReader("./state.json")))) {
-            Gson gson = new Gson();
-            state = gson.fromJson(reader, GameState.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-            state = new GameState(new Field(option), app.limit);
+        if (!app.startWithNewGame) {
+            try (JsonReader reader = new JsonReader(new BufferedReader(new FileReader("./state.json")))) {
+                Gson gson = new Gson();
+                state = gson.fromJson(reader, GameState.class);
+            } catch (Exception e) {
+                e.printStackTrace();
+                state = new GameState(new Field(option), app.limit);
+            }
         }
 
         if (state == null || state.field == null || state.actionStack == null) state = new GameState(new Field(option), app.limit);
